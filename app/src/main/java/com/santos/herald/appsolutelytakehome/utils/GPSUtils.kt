@@ -72,8 +72,8 @@ class GPSUtils(var activity: Activity) {
         isRequestingLocationUpdates = false
 
         mLocationRequest = LocationRequest()
-//        mLocationRequest.interval = UPDATE_INTERVAL_IN_MILLISECONDS
-//        mLocationRequest.fastestInterval = FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS
+        mLocationRequest.interval = UPDATE_INTERVAL_IN_MILLISECONDS
+        mLocationRequest.fastestInterval = FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         val builder = LocationSettingsRequest.Builder()
@@ -156,7 +156,7 @@ class GPSUtils(var activity: Activity) {
         mFusedLocationClient
                 .removeLocationUpdates(mLocationCallback)
                 .addOnCompleteListener(activity, {
-                    Toast.makeText(activity, "Location updates stopped!", Toast.LENGTH_SHORT).show()
+                   // Toast.makeText(activity, "Location updates stopped!", Toast.LENGTH_SHORT).show()
                 })
     }
 

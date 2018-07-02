@@ -91,14 +91,20 @@ class WeatherListActivity : BaseActivity(), WeatherListContract.View, OnItemClic
     }
 
     override fun onRefresh() {
-        presenter?.getWeatherList(WeatherListPresenter.CITY_IDS, mCurrentLocation?.latitude.toString(), mCurrentLocation?.longitude.toString())
+        if(mCurrentLocation != null){
+            presenter?.getWeatherList(WeatherListPresenter.CITY_IDS, mCurrentLocation?.latitude.toString(), mCurrentLocation?.longitude.toString())
+        } else {
+            finishLoading()
+        }
     }
 
     override fun onGetGPSLocation(location: Location) {
         Timber.d("lat: " + location.toString())
         Timber.d("lon: " + location.toString())
         mCurrentLocation = location
-        presenter?.getWeatherList(WeatherListPresenter.CITY_IDS, mCurrentLocation?.latitude.toString(), mCurrentLocation?.longitude.toString())
+        if(mCurrentLocation != null){
+            presenter?.getWeatherList(WeatherListPresenter.CITY_IDS, mCurrentLocation?.latitude.toString(), mCurrentLocation?.longitude.toString())
+        }
     }
 
     override fun onFailedGetGPSLocation(error: String?) {
