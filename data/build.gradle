@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+def config = rootProject.ext.config
+
+
+android {
+    compileSdkVersion config.compileSdkVersion
+    buildToolsVersion config.buildToolsVersion
+    defaultConfig {
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode config.versionCode
+        //versionName config.versionName
+        testInstrumentationRunner config.testInstrumentationRunner
+        multiDexEnabled true
+
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+    }
+
+}
+
+dependencies {
+    implementation project(':domain')
+    //implementation fileTree(include: ['*.jar'], dir: 'libs')
+    def appDependencies = rootProject.ext.appDependencies
+    def libs = rootProject.ext.libsDependencies
+    /* Networking */
+    api libs.gson
+    api libs.okhttp
+    api libs.retrofit
+    api libs.converter_gson
+    api libs.adapter_rxjava2
+    api libs.logging_interceptor
+    /* Storage */
+    api libs.room_runtime
+    api libs.room_rxjava2
+    kapt libs.room_compiler
+    implementation appDependencies.kotlin_stdLib
+}
+repositories {
+    mavenCentral()
+}

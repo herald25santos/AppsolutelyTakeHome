@@ -1,0 +1,97 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
+apply plugin: "kotlin-android-extensions"
+
+def config = rootProject.ext.config
+
+android {
+    compileSdkVersion config.compileSdkVersion
+    buildToolsVersion config.buildToolsVersion
+    flavorDimensions config.flavorDimensions
+
+    defaultConfig {
+        applicationId config.applicationId
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode config.versionCode
+        versionName config.versionName
+        testInstrumentationRunner config.testInstrumentationRunner
+        vectorDrawables.useSupportLibrary true
+        multiDexEnabled true
+        resValue "string", "weather_api_key", "557f7dba15e1b8a6ffd8fff046c3cd93"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            //applicationIdSuffix ".chat.debug"
+            // applicationIdSuffix ".prod.debug"
+            // versionNameSuffix "-prod-debug"
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+
+    productFlavors {
+        dev {
+            resValue "string", "app_name", "App Dev"
+            dimension "tier"
+            buildConfigField 'String', 'HOST', '"https://api.openweathermap.org/"'
+        }
+        production {
+            resValue "string", "app_name", "App Test"
+            dimension "tier"
+            buildConfigField 'String', 'HOST', '"https://api.openweathermap.org/"'
+        }
+        staging  {
+            resValue "string", "app_name", "App Live"
+            dimension "tier"
+            buildConfigField 'String', 'HOST', '"https://api.openweathermap.org/"'
+        }
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+dependencies {
+    implementation project(':domain')
+    implementation project(':data')
+    //implementation fileTree(include: ['*.jar'], dir: 'libs')
+    def support = rootProject.ext.supportDependencies
+    def libs = rootProject.ext.libsDependencies
+    def unitTest = rootProject.ext.unitTestDependencies
+    /* View */
+    implementation support.appCompat_v7
+    implementation support.constraintlayout
+    implementation support.recyclerview_v7
+    implementation support.cardview_v7
+    implementation support.design
+    implementation libs.glide
+    /* Core */
+    implementation libs.rxrelay
+    implementation libs.dagger
+    kapt libs.dagger_compiler
+    implementation libs.core_ktx
+    /* Debug */
+    implementation libs.leakcanary_android
+    implementation libs.stetho
+    implementation libs.stetho_okhttp3
+    /* Various */
+    implementation libs.reactivenetwork_rx2
+    implementation appDependencies.kotlin_stdLib
+    implementation libs.googleLocation
+    implementation libs.dexter
+
+}
+repositories {
+    mavenCentral()
+}

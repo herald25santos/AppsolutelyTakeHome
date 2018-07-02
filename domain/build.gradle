@@ -1,0 +1,26 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+def config = rootProject.ext.config
+android {
+    compileSdkVersion config.compileSdkVersion
+    buildToolsVersion config.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode config.versionCode
+        //versionName config.versionName
+    }
+}
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    def appDependencies = rootProject.ext.appDependencies
+    def libs = rootProject.ext.libsDependencies
+
+    api libs.rxJava
+    api libs.rxAndroid
+    api libs.dagger
+    api libs.timber
+
+    implementation appDependencies.kotlin_stdLib
+}
