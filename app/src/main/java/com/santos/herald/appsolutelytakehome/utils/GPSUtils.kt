@@ -35,9 +35,8 @@ class GPSUtils(var activity: Activity) {
     private lateinit var mLocationRequest: LocationRequest
     private lateinit var mLocationSettingsRequest: LocationSettingsRequest
     private lateinit var mLocationCallback: LocationCallback
-    private lateinit var mCurrentLocation: Location
     private lateinit var onSuccessGetGPSLocation: OnSuccessGetGPSLocation
-
+    private  var mCurrentLocation: Location? = null
     // location updates interval - 10sec
     private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 10 * 1000
 
@@ -65,7 +64,9 @@ class GPSUtils(var activity: Activity) {
                 Timber.d("onLocationResult")
                 mCurrentLocation = locationResult!!.lastLocation
                 mLastUpdateTime = DateFormat.getTimeInstance().format(Date())
-                onSuccessGetGPSLocation.onGetGPSLocation(mCurrentLocation)
+                if(mCurrentLocation != null) {
+                    onSuccessGetGPSLocation.onGetGPSLocation(mCurrentLocation!!)
+                }
             }
         }
 
@@ -207,7 +208,7 @@ class GPSUtils(var activity: Activity) {
                 .addOnSuccessListener({
                     if (it != null) {
                         mCurrentLocation = it
-                        onSuccessGetGPSLocation.onGetGPSLocation(mCurrentLocation)
+                        onSuccessGetGPSLocation.onGetGPSLocation(mCurrentLocation!!)
                     }
                 })
                 .addOnFailureListener({
